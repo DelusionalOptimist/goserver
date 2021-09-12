@@ -8,6 +8,9 @@ import (
 	"github.com/DelusionalOptimist/goserver/handlers"
 )
 
+// type Router implements a router
+// it consists of a ServeMux for listening to and multiplexing requests
+// it also has a port which is used for specifying the port to listen on
 type Router struct {
 	mux  *http.ServeMux
 	port int
