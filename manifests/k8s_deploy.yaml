@@ -1,0 +1,18 @@
+# a "pod" resource which runs goserver in a container
+apiVersion: v1
+kind: Pod
+metadata:
+  name: goserver
+  # to identify the pod. In k8s terms, a selector
+  labels:
+    app: goserver
+spec:
+  # defining containers
+  containers:
+  - image: delusionaloptimist/goserver:latest
+    name: goserver
+    ports:
+    # the container is exposed at this port.
+    # all traffic that comes to the container
+    # goes to this port
+    - containerPort: 8080
