@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: goserver
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goserver
+  # to identify the deployment. In k8s terms, a selector
+  labels:
+    app: goserver
+  namespace: goserver
+spec:
+  # defining containers
+  replicas: 2
+  selector:
+    matchLabels:
+      app: goserver
+  template:
+    metadata:
+      labels:
+        app: goserver
+    spec:
+      containers:
+      - image: delusionaloptimist/goserver:latest
+        imagePullPolicy: IfNotPresent
+        name: goserver
+        ports:
+        # the container is exposed at this port.
+        # all traffic that comes to the container
+        # goes to this port
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goserver
+  namespace: goserver
+spec:
+  # selector as defined in goserver deployment definition
+  selector:
+    app: goserver
+  # a node port exposes the given port such that it is accessible with
+  # node's IP
+  type: NodePort
+  ports:
+    - protocol: TCP
+      # the port at which this service is exposed in-cluster
+      port: 80
+      # the port at which this service will listen for external traffic
+      targetPort: 8080
